@@ -1,0 +1,16 @@
+.custom-pagination ::ng-deep .ngx-pagination li {
+  @apply mx-1;
+}
+
+.custom-pagination ::ng-deep .ngx-pagination li.pagination-previous,
+.custom-pagination ::ng-deep .ngx-pagination li.pagination-next {
+  @apply text-black dark:text-black bg-white;
+}
+
+.custom-pagination ::ng-deep .ngx-pagination li:not(current) {
+  @apply text-black dark:text-white bg-white;
+}
+
+.custom-pagination ::ng-deep .ngx-pagination li.current {
+  @apply bg-sky-500 text-white;
+}

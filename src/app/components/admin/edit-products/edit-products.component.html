@@ -1,0 +1,827 @@
+<section class="overflow-x-auto px-5">
+  <h1 class="text-center mt-5 text-black dark:text-white text-3xl font-bold">
+    Products
+  </h1>
+  <button
+    (click)="openModal('create')"
+    class="py-3 rounded-full mb-5 px-4 bg-blue-500 hover:bg-blue-600 first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium text-gray-900 align-middle float-start transition-all text-sm"
+  >
+    <i class="fa fa-add text-white"></i>
+  </button>
+  <div class="mx-auto p-4 sm:px-6 lg:px-8 ms-5 sm:ms-0">
+    @if(products.length> 12){
+    <div class="flex justify-end align-middle mt-10">
+      <pagination-controls
+        (pageChange)="page = $event"
+        nextLabel=""
+        previousLabel=""
+        [responsive]="true"
+        [autoHide]="true"
+        class="custom-pagination"
+      ></pagination-controls>
+    </div>
+    }
+    <div class="lg:mt-8">
+      <div
+        class="grid grid-cols-1 gap-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
+      >
+        @for (product of products | paginate: {itemsPerPage: 12, currentPage:
+        page}; track product.id) {
+        <div
+          class="relative flex flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md"
+        >
+          <img
+            [src]="
+              product.productImages.length > 0
+                ? imageUrl + product.productImages[0].image
+                : 'no-product-image.png'
+            "
+            alt="product image"
+            class="h-48 w-full object-cover rounded-t-xl"
+          />
+          <div class="p-6">
+            <div class="flex flex-col gap-4">
+              <div class="flex justify-between items-start">
+                <h5
+                  class="block font-sans text-xl text-left font-medium leading-snug tracking-normal text-blue-gray-900 antialiased flex-1 truncate mr-2"
+                >
+                  {{ product.name }}
+                </h5>
+                <p class="text-lg font-semibold text-sky-700 whitespace-nowrap">
+                  {{ product.price | currency }}
+                </p>
+              </div>
+              <div class="flex items-center justify-center">
+                <div class="flex gap-2">
+                  <button
+                    (click)="deleteProduct(product)"
+                    class="inline-block rounded-full border border-red-600 px-3 py-2 text-red-600 hover:bg-red-600 hover:text-white focus:outline-none focus:ring active:bg-red-500"
+                  >
+                    <i class="fa fa-trash"></i>
+                  </button>
+
+                  <button
+                    (click)="openModal('image', product)"
+                    class="inline-block rounded-full border border-yellow-600 px-3 py-2 text-yellow-600 hover:bg-yellow-600 hover:text-white focus:outline-none focus:ring active:bg-yellow-500"
+                  >
+                    <i class="fa fa-image"></i>
+                  </button>
+
+                  <button
+                    (click)="showProductDetails(product)"
+                    class="inline-block rounded-full border border-gray-600 px-3 py-2 text-gray-600 hover:bg-gray-600 hover:text-white focus:outline-none focus:ring active:bg-gray-500"
+                  >
+                    <i class="fa fa-info-circle"></i>
+                  </button>
+
+                  <button
+                    (click)="getProduct('update', product)"
+                    class="inline-block rounded-full border border-green-600 px-3 py-2 text-green-600 hover:bg-green-600 hover:text-white focus:outline-none focus:ring active:bg-green-500"
+                  >
+                    <i class="fa fa-edit"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Product Create Modal -->
+<div
+  [ngClass]="isCreateModalOpen ? 'block' : 'hidden'"
+  class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50"
+>
+  <div
+    class="bg-white dark:bg-gray-800 dark:text-gray-100 p-8 rounded-lg shadow shadow-white max-w-5xl w-full relative"
+  >
+    <h2 class="text-2xl font-bold mb-4 text-black dark:text-white">
+      Create New Product
+    </h2>
+    <form
+      #form="ngForm"
+      (ngSubmit)="createProduct(form)"
+      class="max-w-5xl mx-auto px-4"
+      autocomplete="off"
+    >
+      <div class="grid grid-cols-2 gap-8">
+        <div>
+          <div class="mb-5">
+            <label
+              for="name"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Name</label
+            >
+            <div>
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+              >
+                <input
+                  [(ngModel)]="createModel.name"
+                  (keyup)="updateUrlHandle('create')"
+                  name="name"
+                  id="name"
+                  class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <label
+              for="url"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Url</label
+            >
+            <div>
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+              >
+                <input
+                  [(ngModel)]="createModel.url"
+                  name="url"
+                  id="url"
+                  class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                  required
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <label
+              for="brandId"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Brand</label
+            >
+            <div>
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+              >
+                <select
+                  [(ngModel)]="createModel.brandId"
+                  name="brandId"
+                  id="brandId"
+                  class="w-full bg-gray-100 dark:bg-white bg-opacity-50 rounded border cursor-pointer border-gray-300 focus:border-sky-600 focus:bg-white focus:ring-2 focus:ring-sky-700 text-base outline-none text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  required
+                >
+                  @for (brand of brands; track brand.id) {
+                  <option [value]="brand.id">{{ brand.name }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <label
+              for="categoryId"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Category</label
+            >
+            <div>
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+              >
+                <select
+                  [(ngModel)]="createModel.categoryId"
+                  name="categoryId"
+                  id="categoryId"
+                  class="w-full bg-gray-100 dark:bg-white bg-opacity-50 rounded border cursor-pointer border-gray-300 focus:border-sky-600 focus:bg-white focus:ring-2 focus:ring-sky-700 text-base outline-none text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  required
+                >
+                  @for (category of categories; track category.id) {
+                  <option [value]="category.id">{{ category.name }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <label
+              for="model"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Model</label
+            >
+            <div>
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+              >
+                <input
+                  [(ngModel)]="createModel.model"
+                  name="model"
+                  id="model"
+                  class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="price"
+                  class="block mb-2 text-sm font-medium text-black dark:text-white"
+                  >Price</label
+                >
+                <div>
+                  <div
+                    class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+                  >
+                    <input
+                      [(ngModel)]="createModel.price"
+                      name="price"
+                      id="price"
+                      class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label
+                  for="stock"
+                  class="block mb-2 text-sm font-medium text-black dark:text-white"
+                  >Stock</label
+                >
+                <div>
+                  <div
+                    class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+                  >
+                    <input
+                      [(ngModel)]="createModel.stock"
+                      name="stock"
+                      id="stock"
+                      class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="h-full">
+          <div class="h-full">
+            <label
+              for="description"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Description</label
+            >
+            <div class="h-[calc(100%-2rem)]">
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm h-full"
+              >
+                <textarea
+                  [(ngModel)]="createModel.description"
+                  name="description"
+                  id="description"
+                  class="w-full h-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                  required
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-5">
+        <button
+          [disabled]="!form.valid"
+          type="submit"
+          class="text-white w-full mt-5 cursor-pointer bg-sky-500 border-0 py-2 px-6 focus:outline-none hover:bg-sky-600 rounded text-lg"
+        >
+          Add
+        </button>
+      </div>
+    </form>
+    <button
+      (click)="closeModal('create')"
+      class="absolute top-2 right-2 text-gray-200 transition hover:text-gray-300 text-2xl"
+    >
+      <i class="fa-solid fa-circle-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Product Update Modal -->
+<div
+  [ngClass]="isUpdateModalOpen ? 'block' : 'hidden'"
+  class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50"
+>
+  <div
+    class="bg-white dark:bg-gray-800 dark:text-gray-100 p-8 rounded-lg shadow shadow-white max-w-5xl w-full relative"
+  >
+    <h2 class="text-2xl font-bold mb-4 text-black dark:text-white">
+      Update Product
+    </h2>
+    <form
+      #updateForm="ngForm"
+      (ngSubmit)="updateProduct(updateForm)"
+      class="max-w-5xl mx-auto px-4"
+      autocomplete="off"
+    >
+      <div class="grid grid-cols-2 gap-8">
+        <div>
+          <div class="mb-5">
+            <label
+              for="updateName"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Name</label
+            >
+            <div>
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+              >
+                <input
+                  [(ngModel)]="updateModel.name"
+                  (keyup)="updateUrlHandle('update')"
+                  name="updateName"
+                  id="updateName"
+                  class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <label
+              for="updateUrl"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Url</label
+            >
+            <div>
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+              >
+                <input
+                  [(ngModel)]="updateModel.url"
+                  name="updateUrl"
+                  id="updateUrl"
+                  class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                  required
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <label
+              for="updateBrandId"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Brand</label
+            >
+            <div>
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+              >
+                <select
+                  [(ngModel)]="updateModel.brandId"
+                  name="updateBrandId"
+                  id="updateBrandId"
+                  class="w-full bg-gray-100 dark:bg-white bg-opacity-50 rounded border cursor-pointer border-gray-300 focus:border-sky-600 focus:bg-white focus:ring-2 focus:ring-sky-700 text-base outline-none text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  required
+                >
+                  @for (brand of brands; track brand.id) {
+                  <option [value]="brand.id">{{ brand.name }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <label
+              for="updateCategoryId"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Category</label
+            >
+            <div>
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+              >
+                <select
+                  [(ngModel)]="updateModel.categoryId"
+                  name="updateCategoryId"
+                  id="updateCategoryId"
+                  class="w-full bg-gray-100 dark:bg-white bg-opacity-50 rounded border cursor-pointer border-gray-300 focus:border-sky-600 focus:bg-white focus:ring-2 focus:ring-sky-700 text-base outline-none text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  required
+                >
+                  @for (category of categories; track category.id) {
+                  <option [value]="category.id">{{ category.name }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <label
+              for="updateModel"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Model</label
+            >
+            <div>
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+              >
+                <input
+                  [(ngModel)]="updateModel.model"
+                  name="updateModel"
+                  id="updateModel"
+                  class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="updatePrice"
+                  class="block mb-2 text-sm font-medium text-black dark:text-white"
+                  >Price</label
+                >
+                <div>
+                  <div
+                    class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+                  >
+                    <input
+                      [(ngModel)]="updateModel.price"
+                      name="updatePrice"
+                      id="updatePrice"
+                      class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label
+                  for="updateStock"
+                  class="block mb-2 text-sm font-medium text-black dark:text-white"
+                  >Stock</label
+                >
+                <div>
+                  <div
+                    class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+                  >
+                    <input
+                      [(ngModel)]="updateModel.stock"
+                      name="updateStock"
+                      id="updateStock"
+                      class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="h-full">
+          <div class="h-full">
+            <label
+              for="updateDescription"
+              class="block mb-2 text-sm font-medium text-black dark:text-white"
+              >Description</label
+            >
+            <div class="h-[calc(100%-2rem)]">
+              <div
+                class="overflow-hidden rounded-lg border border-gray-200 shadow-sm h-full"
+              >
+                <textarea
+                  [(ngModel)]="updateModel.description"
+                  name="updateDescription"
+                  id="updateDescription"
+                  class="w-full h-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+                  required
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-5">
+        <button
+          [disabled]="!updateForm.valid"
+          type="submit"
+          class="text-white w-full mt-5 cursor-pointer bg-sky-500 border-0 py-2 px-6 focus:outline-none hover:bg-sky-600 rounded text-lg"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+    <button
+      (click)="closeModal('update')"
+      class="absolute top-2 right-2 text-gray-200 transition hover:text-gray-300 text-2xl"
+    >
+      <i class="fa-solid fa-circle-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Product Details Modal -->
+<div
+  class="relative z-10"
+  aria-labelledby="modal-title"
+  role="dialog"
+  aria-modal="true"
+  [ngClass]="{ hidden: !isDetailsModalOpen }"
+>
+  <div
+    class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+    (click)="closeDetailsModal()"
+  ></div>
+
+  <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+    <div
+      class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+    >
+      <div
+        class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl"
+      >
+        @if (selectedProduct) {
+        <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+              <div class="flex justify-between items-center mb-4">
+                <h3
+                  class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white"
+                  id="modal-title"
+                >
+                  {{ selectedProduct.name }}
+                </h3>
+                <button
+                  (click)="closeDetailsModal()"
+                  type="button"
+                  class="rounded-md bg-white text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+                >
+                  <span class="sr-only">Close</span>
+                  <svg
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="grid grid-cols-2 gap-6">
+                <!-- Product Details -->
+                <div class="space-y-4">
+                  <div>
+                    <h4
+                      class="text-lg font-medium text-gray-900 dark:text-white"
+                    >
+                      Product Details
+                    </h4>
+                    <div class="mt-2 space-y-2">
+                      <p class="text-sm text-gray-600 dark:text-white">
+                        <span class="font-medium">Price:</span>
+                        {{ selectedProduct.price | currency : "₺" }}
+                      </p>
+                      <p class="text-sm text-gray-600 dark:text-white">
+                        <span class="font-medium">Stock:</span>
+                        {{ selectedProduct.stock }}
+                      </p>
+                      <p class="text-sm text-gray-600 dark:text-white">
+                        <span class="font-medium">Brand:</span>
+                        {{ selectedProduct.brand.name }}
+                      </p>
+                      <p class="text-sm text-gray-600 dark:text-white">
+                        <span class="font-medium">Category:</span>
+                        {{ selectedProduct.category.name }}
+                      </p>
+                      <p class="text-sm text-gray-600 dark:text-white">
+                        <span class="font-medium">Model:</span>
+                        {{ selectedProduct.model }}
+                      </p>
+                      <p class="text-sm text-gray-600 dark:text-white">
+                        <span class="font-medium">URL:</span>
+                        {{ selectedProduct.url }}
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <h4
+                      class="text-lg font-medium text-gray-900 dark:text-white"
+                    >
+                      Description
+                    </h4>
+                    <p class="mt-2 text-sm text-gray-600 dark:text-white">
+                      {{ selectedProduct.description }}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Product Images -->
+                <div>
+                  <div class="space-y-4">
+                    <h4
+                      class="text-lg font-medium text-gray-900 dark:text-white"
+                    >
+                      Product Images
+                    </h4>
+
+                    <!-- Image Grid -->
+                    <div class="grid grid-cols-2 gap-4">
+                      <div class="relative group">
+                        <img
+                          src="https://cdn.dsmcdn.com/mnresize/1200/1800/ty1538/product/media/images/prod/PIM/20240911/14/dfe310e0-f983-40d5-875c-29bddc0466a9/1_org_zoom.jpg"
+                          alt="Product image"
+                          class="w-full h-48 object-cover rounded-lg shadow-sm"
+                        />
+                      </div>
+                      <div class="relative group">
+                        <img
+                          src="https://cdn.dsmcdn.com/mnresize/1200/1800/ty1538/product/media/images/prod/PIM/20240911/14/dfe310e0-f983-40d5-875c-29bddc0466a9/1_org_zoom.jpg"
+                          alt="Product image"
+                          class="w-full h-48 object-cover rounded-lg shadow-sm"
+                        />
+                      </div>
+                      <div class="relative group">
+                        <img
+                          src="https://cdn.dsmcdn.com/mnresize/1200/1800/ty1538/product/media/images/prod/PIM/20240911/14/dfe310e0-f983-40d5-875c-29bddc0466a9/1_org_zoom.jpg"
+                          alt="Product image"
+                          class="w-full h-48 object-cover rounded-lg shadow-sm"
+                        />
+                      </div>
+                      <div class="relative group">
+                        <img
+                          src="https://cdn.dsmcdn.com/mnresize/1200/1800/ty1538/product/media/images/prod/PIM/20240911/14/dfe310e0-f983-40d5-875c-29bddc0466a9/1_org_zoom.jpg"
+                          alt="Product image"
+                          class="w-full h-48 object-cover rounded-lg shadow-sm"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+        <div
+          class="bg-gray-50 px-4 dark:bg-gray-800 dark:text-white py-3 sm:flex sm:flex-row-reverse sm:px-6"
+        >
+          <button
+            type="button"
+            (click)="closeDetailsModal()"
+            class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Image Upload Modal -->
+<div
+  [ngClass]="isImageUploadModalOpen ? 'block' : 'hidden'"
+  class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50"
+>
+  <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-6xl mx-4">
+    <div class="p-6">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white">
+          Manage Product Images
+        </h3>
+        <button
+          (click)="closeModal('image')"
+          class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+        >
+          <span class="sr-only">Close</span>
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="grid grid-cols-2 gap-8">
+        <!-- Left Side - Upload Area -->
+        <form #imageUploadForm="ngForm">
+          <div class="space-y-6">
+            <div
+              class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8"
+            >
+              <div class="text-center">
+                <svg
+                  class="mx-auto h-16 w-16 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                <div class="mt-4">
+                  <label
+                    class="relative cursor-pointer bg-white dark:bg-gray-700 rounded-md font-medium text-sky-600 hover:text-sky-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-sky-500"
+                  >
+                    <span>Upload product images</span>
+                    <input
+                      (change)="setImage('create', $event)"
+                      name="uploadImage"
+                      [(ngModel)]="image"
+                      type="file"
+                      class="sr-only"
+                      accept="image/*"
+                      required
+                    />
+                  </label>
+                </div>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                  PNG, JPG, GIF up to 5MB
+                </p>
+              </div>
+            </div>
+
+            <!-- Upload Button -->
+            <div class="flex justify-end">
+              <button
+                [disabled]="!imageUploadForm.valid"
+                (click)="createProductImage(imageUploadForm)"
+                type="submit"
+                class="inline-flex justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+              >
+                Upload Images
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Right Side - Existing Images -->
+        <div>
+          <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+            Product Images
+          </h4>
+          <div class="grid grid-cols-2 gap-4">
+            @for (image of currentProductImages; track image.id) {
+            <div class="relative group">
+              <img
+                [src]="imageUrl + image.image"
+                alt="Product image"
+                class="w-full h-48 object-cover rounded-lg"
+              />
+              <div
+                class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center"
+              >
+                <button
+                  (click)="deleteProductImage(image)"
+                  class="hidden group-hover:block bg-red-600 text-white px-3 py-2 rounded-full hover:bg-red-700 transition-all duration-300"
+                >
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 rounded-b-lg">
+      <div class="flex justify-end">
+        <button
+          type="button"
+          (click)="closeModal('image')"
+          class="rounded-md bg-white dark:bg-gray-800 px-4 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 1)" class="custom-pagination"></ngx-spinner>

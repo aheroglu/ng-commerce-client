@@ -1,0 +1,283 @@
+<!-- Banner -->
+<section class="relative bg-home-banner bg-cover bg-center bg-no-repeat">
+  <div class="inset-0 bg-black bg-opacity-50 py-36 mt-20">
+    <div
+      class="flex justify-center align-middle mx-auto max-w-screen-xl px-4 sm:px-6 text-center items-center lg:px-8"
+    >
+      <div class="max-w-xl text-center">
+        <h1 class="text-3xl font-extrabold text-white sm:text-5xl">
+          Buy Everything
+
+          <strong class="block font-extrabold text-sky-300">
+            About to Technology
+          </strong>
+        </h1>
+
+        <p class="mt-4 max-w-lg text-white sm:text-xl/relaxed">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt
+          illo tenetur fuga ducimus numquam ea!
+        </p>
+
+        <div class="mt-8 flex justify-center align-middle gap-4 text-center">
+          <button
+            routerLink="/products"
+            class="block cursor-pointer w-full rounded bg-sky-500 px-12 h-14 transition font-medium text-white shadow hover:bg-sky-600 focus:outline-none focus:ring active:bg-sky-700 sm:w-auto"
+          >
+            Discover Products
+          </button>
+
+          <button
+            routerLink="/contact"
+            class="block text-center cursor-pointer transition w-full rounded bg-white px-12 h-14 font-medium text-sky-500 shadow hover:text-sky-600 focus:outline-none focus:ring active:text-sky-700 sm:w-auto"
+          >
+            Contact Us
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section
+  class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mx-auto max-w-screen-xl px-4 pb-6 pt-16 sm:px-6 lg:px-8 lg:pt-24"
+>
+  @for (category of categories; track category.id) {
+  <div
+    class="relative hover:shadow-xl hover:-translate-y-1 transition cursor-pointer duration-500"
+  >
+    <img
+      [src]="image + category.image"
+      alt="Laptops"
+      class="w-full h-64 object-cover rounded-lg"
+    />
+    <div
+      class="absolute inset-0 bg-black bg-opacity-50 dark:bg-opacity-0 flex items-center justify-start rounded-lg transition-colors duration-300"
+    >
+      <h2 class="text-white text-3xl font-bold mt-auto mb-10 ms-10">
+        {{ category.name }}
+      </h2>
+    </div>
+  </div>
+  }
+</section>
+
+<!-- Top Seller Products -->
+<section>
+  <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+    <h2 class="text-center font-bold text-black dark:text-white text-3xl">
+      Top Seller Products
+    </h2>
+
+    <ul class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      @for (item of [1,2,3,4,5,6,7,8]; track $index) {
+      <li>
+        <a
+          class="block rounded shadow transition-shadow cursor-pointer hover:shadow-xl"
+        >
+          <img
+            src="https://cdn.dsmcdn.com/mnresize/1200/1800/ty1538/product/media/images/prod/PIM/20240911/14/dfe310e0-f983-40d5-875c-29bddc0466a9/1_org_zoom.jpg"
+            alt="product image"
+            class="h-auto rounded-t-md w-auto object-cover sm:h-auto sm:w-auto"
+          />
+
+          <div class="border-t rounded-b bg-white">
+            <div class="flex justify-between text-lg p-3">
+              <div>
+                <h3 class="text-gray-900">iPhone 16</h3>
+                <h5 class="text-gray-900 text-sm">Mobile Phones</h5>
+              </div>
+
+              <p class="text-gray-900">$299</p>
+            </div>
+            <div
+              class="flex items-center align-middle justify-between p-2 pb-3"
+            >
+              <button
+                class="block w-52 bg-black px-5 py-3 mx-1 text-xs font-medium uppercase tracking-wide text-white"
+              >
+                Shop Now
+              </button>
+
+              <button
+                class="group rounded-full px-3 py-2 mx-1 border border-red-600 bg-white hover:bg-red-600 transition duration-300"
+              >
+                <i class="fa fa-heart text-red-600 group-hover:text-white"></i>
+              </button>
+            </div>
+          </div>
+        </a>
+      </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- Top Brands -->
+<section class="mb-10">
+  <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+    <h2 class="text-center font-bold text-black text-3xl mb-14 dark:text-white">
+      Top Brands
+    </h2>
+    <div class="inline-flex overflow-hidden w-full flex-nowrap">
+      <ul
+        class="flex items-center justify-center md:justify-start [&_li]:mx-8 [&_img]:max-w-none animate-infinite-scroll"
+      >
+        <li>
+          <img
+            src="brand-images/brand-xiaomi.png"
+            alt="Xiaomi"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-sony.png"
+            alt="Sony"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-hp.png"
+            alt="HP"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-acer.png"
+            alt="Acer"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-apple.png"
+            alt="Apple"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-huawei.png"
+            alt="Huwaei"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-samsung.png"
+            alt="Samsung"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+      </ul>
+      <ul
+        class="flex items-center justify-center md:justify-start [&_li]:mx-8 [&_img]:max-w-none animate-infinite-scroll"
+      >
+        <li>
+          <img
+            src="brand-images/brand-xiaomi.png"
+            alt="Xiaomi"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-sony.png"
+            alt="Sony"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-hp.png"
+            alt="HP"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-acer.png"
+            alt="Acer"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-apple.png"
+            alt="Apple"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-huawei.png"
+            alt="Huwaei"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+        <li>
+          <img
+            src="brand-images/brand-samsung.png"
+            alt="Samsung"
+            class="w-20 h-20 object-contain mx-4"
+          />
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
+  <div class="p-8 md:p-12 lg:px-16 lg:py-24">
+    <div class="mx-auto max-w-lg text-center">
+      <h2 class="text-2xl font-bold text-gray-900 md:text-3xl dark:text-white">
+        Sign up for the newsletter
+      </h2>
+
+      <p class="hidden text-gray-500 sm:mt-4 sm:block dark:text-white">
+        Be informed of discounts and more instantly
+      </p>
+    </div>
+
+    <div class="mx-auto mt-8 max-w-xl">
+      <form
+        #form="ngForm"
+        (ngSubmit)="signUpNewsletter(form)"
+        autocomplete="off"
+        class="sm:flex sm:gap-4"
+      >
+        <div class="sm:flex-1">
+          <label for="email" class="sr-only">Email</label>
+
+          <input
+            [(ngModel)]="newsletter.email"
+            name="email"
+            type="email"
+            placeholder="Email address"
+            class="w-full rounded-md border-gray-200 bg-white p-3 text-gray-700 shadow-sm transition focus:border-white focus:outline-none focus:ring focus:ring-sky-500"
+            required
+          />
+        </div>
+
+        <button
+          [disabled]="!form.valid"
+          class="group relative inline-flex items-center overflow-hidden rounded bg-sky-500 hover:bg-sky-600 px-8 py-3 text-white focus:outline-none focus:ring active:bg-sky-700"
+        >
+          <span class="absolute -end-full transition-all group-hover:end-4">
+            <i class="fa fa-arrow-right"></i>
+          </span>
+
+          <span class="text-sm font-medium transition-all group-hover:me-4">
+            Sign Up
+          </span>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 1)"></ngx-spinner>

@@ -1,0 +1,577 @@
+<section class="bg-gray-100 dark:bg-gray-800 text-black dark:text-white mt-10">
+  <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+      <div class="rounded-lg bg-white dark:bg-gray-700 p-8 shadow-lg">
+        <h3 class="mb-5 text-2xl font-bold">Edit Your Profile</h3>
+        <form
+          #profileForm="ngForm"
+          (ngSubmit)="updateProfile(profileForm)"
+          class="space-y-4 pb-5"
+        >
+          <div>
+            <label class="sr-only" for="fullName">Name</label>
+            <input
+              [(ngModel)]="profileModel.fullName"
+              name="fullName"
+              class="w-full rounded-lg border-gray-200 dark:text-black dark:border-gray-700 p-3 text-sm"
+              placeholder="Name"
+              type="text"
+              id="fullName"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="sr-only" for="email">Email</label>
+            <input
+              [(ngModel)]="profileModel.email"
+              name="email"
+              class="w-full rounded-lg border-gray-200 dark:text-black dark:border-gray-700 p-3 text-sm"
+              placeholder="Email address"
+              type="email"
+              id="email"
+              required
+            />
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label class="sr-only" for="birthDate">Date of Birth</label>
+              <input
+                [(ngModel)]="profileModel.birthDate"
+                name="birthDate"
+                class="w-full rounded-lg border-gray-200 dark:text-black text-zinc-400 dark:border-gray-700 p-3 text-sm"
+                placeholder="Date of Birth"
+                type="date"
+                id="birthDate"
+                required
+              />
+            </div>
+
+            <div>
+              <label class="sr-only" for="phoneNumber">Phone</label>
+              <input
+                [(ngModel)]="profileModel.phoneNumber"
+                name="phoneNumber"
+                class="w-full rounded-lg border-gray-200 dark:text-black dark:border-gray-700 p-3 text-sm"
+                placeholder="Phone number"
+                type="text"
+                id="phoneNumber"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button
+              [disabled]="!profileForm.valid"
+              type="submit"
+              class="block float-end cursor-pointer w-auto transition rounded bg-sky-500 p-3 text-sm font-medium text-white shadow hover:bg-sky-600 focus:outline-none focus:ring active:bg-sky-700"
+            >
+              Update Profile
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="rounded-lg bg-white dark:bg-gray-700 p-8 shadow-lg">
+        <h3 class="mb-5 text-2xl font-bold">Update Your Password</h3>
+        <form
+          #passwordForm="ngForm"
+          (ngSubmit)="updatePassword(passwordForm)"
+          class="space-y-4 pb-5"
+        >
+          <div>
+            <label class="sr-only" for="currentPassword"
+              >Current Password</label
+            >
+            <input
+              [(ngModel)]="passwordModel.currentPassword"
+              name="currentPassword"
+              class="w-full rounded-lg border-gray-200 dark:text-black dark:border-gray-700 p-3 text-sm"
+              placeholder="Current password"
+              type="password"
+              id="currentPassword"
+              required
+            />
+          </div>
+          <div>
+            <label class="sr-only" for="newPassword">New Password</label>
+            <input
+              [(ngModel)]="passwordModel.newPassword"
+              name="newPassword"
+              class="w-full rounded-lg border-gray-200 dark:text-black dark:border-gray-700 p-3 text-sm"
+              placeholder="New password"
+              type="password"
+              id="newPassword"
+              required
+            />
+          </div>
+          <div>
+            <label class="sr-only" for="confirmPassword"
+              >Confirm Password</label
+            >
+            <input
+              [(ngModel)]="passwordModel.confirmPassword"
+              name="confirmNewPassword"
+              class="w-full rounded-lg border-gray-200 dark:text-black dark:border-gray-700 p-3 text-sm"
+              placeholder="Confirm password"
+              type="password"
+              id="confirmPassword"
+              required
+            />
+          </div>
+
+          <div class="mt-4">
+            <button
+              [disabled]="!passwordForm.valid"
+              type="submit"
+              class="block float-end cursor-pointer w-auto transition rounded bg-sky-500 p-3 text-sm font-medium text-white shadow hover:bg-sky-600 focus:outline-none focus:ring active:bg-sky-700"
+            >
+              Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="rounded-lg bg-white dark:bg-gray-700 px-8 py-4 mt-5 shadow-lg">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div class="lg:col-span-6 flex flex-col">
+          <h3 class="text-2xl font-bold">Addresses</h3>
+          <p>Edit your existing addresses or create new</p>
+        </div>
+        <div class="lg:col-span-6 flex items-center justify-end">
+          <button
+            (click)="openModal('create-address')"
+            class="block float-end cursor-pointer w-auto transition rounded bg-sky-500 p-3 text-sm font-medium text-white shadow hover:bg-sky-600 focus:outline-none focus:ring active:bg-sky-700"
+          >
+            Create New Address
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6"
+      >
+        @for (address of addresses; track address.id) {
+        <div
+          class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800 shadow-md flex flex-col justify-between items-start h-48"
+        >
+          <div>
+            <h4 class="text-lg font-semibold">{{ address.addressType }}</h4>
+            <p class="text-gray-600 dark:text-gray-300">
+              {{ address.street }}, {{ address.city }}
+            </p>
+            <p class="text-gray-600 dark:text-gray-300">
+              {{ address.postalCode }}, Türkiye
+            </p>
+          </div>
+          <div class="mt-4 flex justify-between w-full">
+            <button
+              (click)="deleteAddress(address)"
+              class="text-sm text-red-500 hover:underline"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="rounded-lg bg-white dark:bg-gray-700 px-8 py-4 mt-5 shadow-lg">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div class="lg:col-span-6 flex flex-col">
+          <h3 class="text-2xl font-bold">Credit Cards</h3>
+          <p>Edit your existing credit cards or create new</p>
+        </div>
+        <div class="lg:col-span-6 flex items-center justify-end">
+          <button
+            (click)="openModal('create-creditcard')"
+            class="block float-end cursor-pointer w-auto transition rounded bg-sky-500 p-3 text-sm font-medium text-white shadow hover:bg-sky-600 focus:outline-none focus:ring active:bg-sky-700"
+          >
+            Create New Credit Card
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-4 divide-y divide-gray-200">
+        <div class="py-4 flex">
+          @for (card of creditCards; track card.id) {
+          <div
+            class="relative h-48 w-80 rounded-xl mr-3 bg-gradient-to-r from-gray-400 to-gray-300 text-white shadow-xl transition-transform sm:h-56 sm:w-96"
+          >
+            <div class="absolute top-4 w-full px-8 sm:top-8">
+              <div class="flex justify-between">
+                <div class="">
+                  <p class="font-light">Name</p>
+                  <p class="font-medium tracking-widest">
+                    {{ card.holderName }}
+                  </p>
+                </div>
+                <div class="">
+                  <button
+                    (click)="deleteCreditCard(card)"
+                    type="submit"
+                    class="text-red-500 hover:underline me-2"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+              <div class="pt-1">
+                <p class="font-light">Card Number</p>
+                <p class="tracking-more-wider font-medium">
+                  **** **** **** {{ card.number.slice(-4) }}
+                </p>
+              </div>
+              <div class="pt-4 pr-6 sm:pt-6">
+                <div class="flex justify-between">
+                  <div class="">
+                    <p class="text-xs font-light">Expiry</p>
+                    <p class="text-base font-medium tracking-widest">
+                      {{ card.expirationMonth }}/{{ card.expirationYear }}
+                    </p>
+                  </div>
+
+                  <div class="">
+                    <p class="text-xs font-light">CVV</p>
+                    <p class="tracking-more-wider text-sm font-bold">
+                      {{ card.cvv }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-lg bg-white dark:bg-gray-700 px-8 py-4 mt-5 shadow-lg">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div class="lg:col-span-5">
+          <h3 class="text-2xl font-bold">Newsletter</h3>
+          <p>Subscribe our newsletter</p>
+        </div>
+        <div class="lg:col-span-7">
+          <div class="flex items-center justify-end space-x-4">
+            @if(!isEmailSubscribed){
+            <span class="text-lg italic me-3"
+              >Subscribe to our newsletter and get access to discounts, coupon
+              codes and more before anyone else.</span
+            >
+            <button
+              (click)="subscriberNewsletter()"
+              type="submit"
+              class="block float-end cursor-pointer w-auto transition rounded bg-sky-500 p-3 text-sm font-medium text-white shadow hover:bg-sky-600 focus:outline-none focus:ring active:bg-sky-700"
+            >
+              Subscribe
+            </button>
+            } @else {
+            <span class="text-lg italic me-3"
+              >You have already subscribed our newsletter.</span
+            >
+            <button
+              (click)="unsubscribeNewsletter()"
+              type="submit"
+              class="block float-end cursor-pointer mx-auto w-auto transition rounded bg-sky-500 p-3 text-sm font-medium text-white shadow hover:bg-sky-600 focus:outline-none focus:ring active:bg-sky-700"
+            >
+              Unsubscribe
+            </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-lg bg-rose-400 px-8 py-4 mt-5 shadow-lg">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div class="lg:col-span-4">
+          <h3 class="text-2xl font-bold">Danger Zone</h3>
+          <p>Delete your account</p>
+        </div>
+        <div class="lg:col-span-8">
+          <form
+            #deleteAccountForm="ngForm"
+            (ngSubmit)="deleteAccount(deleteAccountForm)"
+          >
+            <div class="flex items-center space-x-4">
+              <input
+                [(ngModel)]="emailForDeleteAccount"
+                name="deleteAccountEmail"
+                type="email"
+                placeholder="Enter your email address for delete your account"
+                class="flex-grow w-full rounded-md border-gray-200 bg-white p-3 text-gray-700 shadow-sm transition focus:border-white focus:outline-none focus:ring focus:ring-sky-500"
+                required
+              />
+              <button
+                [disabled]="!deleteAccountForm.valid"
+                type="submit"
+                class="block float-end cursor-pointer w-auto transition rounded bg-sky-500 p-3 text-sm font-medium text-white shadow hover:bg-sky-600 focus:outline-none focus:ring active:bg-sky-700"
+              >
+                Delete
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div
+  [ngClass]="isCreateAddressModalOpen ? 'block' : 'hidden'"
+  class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50"
+>
+  <div
+    class="bg-white dark:bg-gray-800 dark:text-gray-100 p-8 rounded-lg shadow shadow-white max-w-md w-full relative"
+  >
+    <h2 class="text-2xl font-bold mb-4 text-black dark:text-white">
+      Create New Address
+    </h2>
+    <form
+      #createAddressForm="ngForm"
+      (ngSubmit)="createAddress(createAddressForm)"
+      class="max-w-sm mx-auto"
+      autocomplete="off"
+    >
+      <div class="mb-5">
+        <label
+          for="addressType"
+          class="block mb-2 text-sm font-medium text-black dark:text-white"
+          >Address Type</label
+        >
+        <input
+          #addressType="ngModel"
+          [(ngModel)]="createAddressModel.addressType"
+          name="addressType"
+          type="text"
+          id="name"
+          placeholder="Home, Workplace etc."
+          class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:bg-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+          required
+        />
+      </div>
+      <div class="mb-5">
+        <label
+          for="addressType"
+          class="block mb-2 text-sm font-medium text-black dark:text-white"
+          >City</label
+        >
+        <select
+          [(ngModel)]="createAddressModel.city"
+          (change)="loadDistricts()"
+          name="topic"
+          id="topic"
+          class="w-full bg-gray-100 dark:bg-white bg-opacity-50 rounded border cursor-pointer border-gray-300 focus:border-sky-600 focus:bg-white focus:ring-2 focus:ring-sky-700 text-base outline-none text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
+          required
+        >
+          @for (city of cities; track city.id) {
+          <option [value]="city.name" (change)="loadDistricts()">
+            {{ city.name }}
+          </option>
+          }
+        </select>
+      </div>
+      @if(this.createAddressModel.city){
+      <div class="mb-5">
+        <label
+          for="district"
+          class="block mb-2 text-sm font-medium text-black dark:text-white"
+          >District</label
+        >
+        <select
+          [(ngModel)]="createAddressModel.district"
+          name="district"
+          id="district"
+          class="w-full bg-gray-100 dark:bg-white bg-opacity-50 rounded border cursor-pointer border-gray-300 focus:border-sky-600 focus:bg-white focus:ring-2 focus:ring-sky-700 text-base outline-none text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
+          required
+        >
+          @for (district of districts; track district.id) {
+          <option [value]="district.name">{{ district.name }}</option>
+          }
+        </select>
+      </div>
+      } @if(this.createAddressModel.city && this.createAddressModel.district){
+      <div class="mb-5">
+        <label
+          for="street"
+          class="block mb-2 text-sm font-medium text-black dark:text-white"
+          >Street</label
+        >
+        <input
+          #street="ngModel"
+          [(ngModel)]="createAddressModel.street"
+          name="street"
+          type="text"
+          id="street"
+          placeholder="Home, Workplace etc."
+          class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:bg-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+          required
+        />
+      </div>
+      <div class="mb-5">
+        <label
+          for="postalCode"
+          class="block mb-2 text-sm font-medium text-black dark:text-white"
+          >Postal Code</label
+        >
+        <input
+          #postalCode="ngModel"
+          [(ngModel)]="createAddressModel.postalCode"
+          name="postalCode"
+          type="text"
+          id="postalCode"
+          class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:bg-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+          required
+        />
+      </div>
+      <div class="mb-5">
+        <label
+          for="fullAddress"
+          class="block mb-2 text-sm font-medium text-black dark:text-white"
+          >Full Address</label
+        >
+        <textarea
+          #fullAddress="ngModel"
+          [(ngModel)]="createAddressModel.fullAddress"
+          name="fullAddress"
+          type="text"
+          id="fullAddress"
+          class="bg-gray-50 border h-20 border-gray-300 text-black text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:bg-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+          required
+        ></textarea>
+      </div>
+      }
+      <div class="mb-5">
+        <button
+          [disabled]="!createAddressForm.valid"
+          type="submit"
+          class="text-white w-full cursor-pointer bg-sky-500 border-0 py-2 px-6 focus:outline-none hover:bg-sky-600 rounded text-lg"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+    <button
+      (click)="closeModal('create-address')"
+      class="absolute top-2 right-2 text-gray-300 hover:text-gray-400 text-2xl"
+    >
+      <i class="fa-solid fa-circle-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Create Credit Card Modal -->
+<div
+  [ngClass]="isCreateCreditCardModalOpen ? 'block' : 'hidden'"
+  class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50"
+>
+  <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full relative">
+    <h2 class="text-2xl font-bold mb-4">Add New Credit Card</h2>
+    <form
+      #createCreditCardForm="ngForm"
+      (ngSubmit)="createCreditCard(createCreditCardForm)"
+      autocomplete="off"
+      class="space-y-4"
+    >
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Card Holder Name
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="createCreditCardModel.holderName"
+          name="createCardHolderName"
+          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+          required
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Card Number
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="createCreditCardModel.number"
+          name="createCardNumber"
+          maxlength="16"
+          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+          required
+        />
+      </div>
+
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Month
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="createCreditCardModel.expirationMonth"
+            name="createCardExpirationMonth"
+            maxlength="2"
+            placeholder="MM"
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Year
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="createCreditCardModel.expirationYear"
+            name="createCardExpirationYear"
+            maxlength="2"
+            placeholder="YY"
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            CVV
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="createCreditCardModel.cvv"
+            name="createCardCVV"
+            maxlength="3"
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-3 mt-6">
+        <button
+          type="button"
+          (click)="closeModal('createCreditCard')"
+          class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
+        >
+          Cancel
+        </button>
+        <button
+          [disabled]="!createCreditCardForm.valid"
+          type="submit"
+          class="px-4 py-2 text-sm bg-sky-500 text-white rounded-lg hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+    <button
+      (click)="closeModal('createCreditCard')"
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 1)"></ngx-spinner>

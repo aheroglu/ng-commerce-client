@@ -1,0 +1,108 @@
+<ng-container *ngIf="favourites && favourites.length > 0; else noFavourites">
+  <section>
+    <div
+      class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 mt-10"
+    >
+      <h1
+        class="text-xl font-bold text-black text-center dark:text-white sm:text-3xl"
+      >
+        Your Favourites
+      </h1>
+      <div class="mt-4 lg:mt-8 lg:grid lg:grid-cols-4 lg:items-start lg:gap-8">
+        <div class="lg:col-span-3">
+          <ul class="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            @for (favourite of favourites; track favourite.id) {
+            <li>
+              <div
+                class="block rounded shadow transition-shadow hover:shadow-xl"
+              >
+                <img
+                  [routerLink]="['/product', favourite.product.url]"
+                  src="https://cdn.dsmcdn.com/mnresize/1200/1800/ty1538/product/media/images/prod/PIM/20240911/14/dfe310e0-f983-40d5-875c-29bddc0466a9/1_org_zoom.jpg"
+                  alt="product image"
+                  class="h-auto rounded-t-md w-auto cursor-pointer object-cover sm:h-auto sm:w-auto"
+                />
+
+                <div class="border-t rounded-b bg-white">
+                  <div class="flex justify-between text-lg p-3">
+                    <div>
+                      <h3
+                        [routerLink]="['/product', favourite.product.url]"
+                        class="text-gray-900 font-bold truncate cursor-pointer"
+                      >
+                        {{ favourite.product.name }}
+                      </h3>
+                      <h5 class="text-gray-900 text-sm">
+                        {{ favourite.product.category.name }}
+                      </h5>
+                    </div>
+
+                    <p class="text-gray-900">
+                      {{ favourite.product.price | currency }}
+                    </p>
+                  </div>
+                  <div
+                    class="flex items-center align-middle justify-between p-2 pb-3"
+                  >
+                    <button
+                      class="block w-52 bg-black px-5 py-3 mx-1 text-xs font-medium uppercase tracking-wide text-white"
+                    >
+                      Add to cart
+                    </button>
+
+                    <button
+                      (click)="deleteFromFavourites(favourite)"
+                      class="group rounded-full px-3 py-2 mx-1 border border-red-600 bg-white hover:bg-red-600 transition duration-300"
+                    >
+                      <i
+                        class="fa fa-xmark text-red-600 group-hover:text-white"
+                      ></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #noFavourites>
+  <div
+    class="grid h-screen place-content-center bg-white px-4 dark:bg-gray-800 transition duration-300"
+  >
+    <div class="text-center">
+      <img src="no-favourites.svg" alt="no favourites image" />
+
+      <h1
+        class="mt-6 text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white transition duration-300"
+      >
+        Uh-oh!
+      </h1>
+
+      <p class="mt-4 text-gray-500 dark:text-white transition duration-300">
+        There is no products in your favourites.
+      </p>
+
+      <button
+        routerLink="/products"
+        class="group relative inline-block focus:outline-none focus:ring mt-3"
+      >
+        <span
+          class="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-sky-500 transition group-hover:translate-x-0 group-hover:translate-y-0 duration-300"
+        ></span>
+
+        <span
+          class="relative inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black transition duration-300 dark:text-white group-active:text-opacity-75"
+        >
+          Discover Products
+        </span>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 1)"></ngx-spinner>

@@ -1,0 +1,176 @@
+<ng-container *ngIf="cartItems && cartItems.length > 0; else noProducts">
+  <section>
+    <div
+      class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 mt-10"
+    >
+      <div class="mx-auto">
+        <header class="text-center">
+          <h1 class="text-xl font-bold text-black dark:text-white sm:text-3xl">
+            Your Cart
+          </h1>
+        </header>
+
+        <div class="mt-8">
+          <ul class="space-y-4">
+            @for (cartItem of cartItems; track cartItem.id) {
+            <li class="flex items-center gap-4">
+              <img
+                [routerLink]="['/product', cartItem.product.url]"
+                [src]="
+                  cartItem.product.productImages.length > 0
+                    ? imageUrl + cartItem.product.productImages[0].image
+                    : 'no-product-image.png'
+                "
+                alt="product image"
+                class="size-48 cursor-pointer rounded object-cover"
+              />
+
+              <div>
+                <h3
+                  [routerLink]="['/product', cartItem.product.url]"
+                  class="text-2xl text-black dark:text-white cursor-pointer"
+                >
+                  {{ cartItem.product.name }}
+                </h3>
+
+                <dl
+                  class="mt-0.5 space-y-px text-lg text-black dark:text-white"
+                >
+                  <div>
+                    <dt class="inline">Price:</dt>
+                    <dd class="inline">
+                      {{ cartItem.product.price | currency }}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div class="flex flex-1 items-center justify-end gap-2">
+                <div class="flex items-center space-x-2">
+                  <button
+                    (click)="decreaseQuantity(cartItem)"
+                    type="button"
+                    class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
+                  >
+                    <i class="fas fa-minus text-sm text-gray-600"></i>
+                  </button>
+                  　 　 　 　 　 　
+                  <span
+                    class="w-12 h-8 flex items-center justify-center bg-gray-50 rounded-md text-gray-700 font-medium"
+                  >
+                    {{ cartItem.quantity }}
+                  </span>
+
+                  <button
+                    (click)="increaseQuantity(cartItem)"
+                    type="button"
+                    class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
+                  >
+                    <i class="fas fa-plus text-sm text-gray-600"></i>
+                  </button>
+                </div>
+
+                <button
+                  (click)="removeCartItem(cartItem)"
+                  class="group w-8 h-8 flex items-center justify-center rounded-full text-red-600 bg-gray-100 hover:bg-red-600 transition-colors duration-200"
+                >
+                  <span class="sr-only">Remove item</span>
+                  <i
+                    class="fa fa-trash transition duration-300 group-hover:text-white"
+                  ></i>
+                </button>
+              </div>
+            </li>
+            }
+          </ul>
+
+          <div class="mt-8 flex justify-end border-t border-gray-100 pt-8">
+            <div class="w-screen max-w-lg space-y-4">
+              <dl class="space-y-0.5 text-lg text-black dark:text-white">
+                <div class="flex justify-between">
+                  <dt>Subtotal</dt>
+                  <dd>{{ calculateSubtotal() | currency }}</dd>
+                </div>
+
+                <div class="flex justify-between">
+                  <dt>Shipping</dt>
+                  @if(calculateSubtotal() > 25){
+                  <dd>Free</dd>
+                  } @else {
+
+                  <dd class="inline-block">{{ 25 | currency }}</dd>
+                  }
+                </div>
+
+                <div class="flex justify-between !text-base font-medium">
+                  <dt>Total</dt>
+                  @if(calculateSubtotal() > 25){
+                  <dd>{{ calculateSubtotal() | currency }}</dd>
+                  } @else {
+                  <dd>{{ calculateSubtotal() + 25 | currency }}</dd>
+                  }
+                </div>
+
+                @if(calculateSubtotal() < 25){
+                <div class="flex justify-between">
+                  <dt></dt>
+                  <dd class="font-light text-sm italic">
+                    Add more products for free shipping
+                    {{ calculateSubtotal() - 25 | currency }}
+                  </dd>
+                </div>
+                }
+              </dl>
+
+              <div class="flex justify-end">
+                <a
+                  routerLink="/checkout"
+                  class="block font-bold rounded bg-sky-500 px-5 py-3 text-sm text-gray-100 transition hover:bg-sky-600"
+                >
+                  Go to Checkout
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #noProducts>
+  <div
+    class="grid h-screen place-content-center bg-white px-4 dark:bg-gray-800 transition duration-300"
+  >
+    <div class="text-center">
+      <img src="no-products.svg" alt="no products image" />
+
+      <h1
+        class="mt-6 text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white transition duration-300"
+      >
+        Uh-oh!
+      </h1>
+
+      <p class="mt-4 text-gray-500 dark:text-white transition duration-300">
+        There is no products in your cart.
+      </p>
+
+      <button
+        routerLink="/products"
+        class="group relative inline-block focus:outline-none focus:ring mt-3"
+      >
+        <span
+          class="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-sky-500 transition group-hover:translate-x-0 group-hover:translate-y-0 duration-300"
+        ></span>
+
+        <span
+          class="relative inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black transition duration-300 dark:text-white group-active:text-opacity-75"
+        >
+          Discover Products
+        </span>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 1)"></ngx-spinner>

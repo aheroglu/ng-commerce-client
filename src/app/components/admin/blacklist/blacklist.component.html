@@ -1,0 +1,52 @@
+<section class="overflow-x-auto">
+  <h1 class="text-center mt-5 mb-10 text-red-600 text-3xl font-bold">
+    Blacklist
+  </h1>
+  <table
+    class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm text-center rounded"
+  >
+    <thead class="ltr:text-left rtl:text-right">
+      <tr>
+        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+          Name
+        </th>
+        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+          Email
+        </th>
+        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+          Reason
+        </th>
+      </tr>
+    </thead>
+
+    <tbody class="divide-y divide-gray-200">
+      @for (blacklist of blacklists; track blacklist.id) {
+      <tr>
+        <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+          {{ blacklist.appUser.fullName }}
+        </td>
+        <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+          {{ blacklist.appUser.email }}
+        </td>
+        <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+          {{ blacklist.reason }}
+        </td>
+        <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+          <div class="flex justify-center">
+            <button
+              (click)="deleteBlacklist(blacklist)"
+              class="py-3 px-4 group bg-white hover:bg-red-600 inline-flex justify-center items-center gap-2 -ml-px first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium text-gray-900 align-middle transition-all text-sm"
+            >
+              <i
+                class="fa fa-user-slash group-hover:text-white text-red-600"
+              ></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 1)"></ngx-spinner>

@@ -1,0 +1,124 @@
+<section class="overflow-x-auto">
+  <h1
+    class="text-center mt-5 mb-10 text-black dark:text-white text-3xl font-bold"
+  >
+    Customers
+  </h1>
+  <table
+    class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm text-center rounded"
+  >
+    <thead class="ltr:text-left rtl:text-right">
+      <tr>
+        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+          Name
+        </th>
+        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+          Email
+        </th>
+        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+          Phone
+        </th>
+        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+          Birth Date
+        </th>
+      </tr>
+    </thead>
+
+    <tbody class="divide-y divide-gray-200">
+      @for (user of users; track user.id) {
+      <tr [ngClass]="user.isBlocked ? 'line-through' : ''">
+        <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+          {{ user.fullName }}
+        </td>
+        <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+          {{ user.email }}
+        </td>
+        <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+          {{ user.phoneNumber }}
+        </td>
+        <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+          {{ user.birthDate }}
+        </td>
+        <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+          <div class="flex justify-center">
+            <button
+              (click)="deleteUser(user)"
+              [disabled]="user.isBlocked"
+              class="py-3 px-4 group bg-white disabled:hover:bg-red-300 hover:bg-red-600 inline-flex justify-center items-center gap-2 -ml-px first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium text-gray-900 align-middle transition-all text-sm"
+            >
+              <i class="fa fa-trash group-hover:text-white text-red-600"></i>
+            </button>
+            <button
+              (click)="openModal()"
+              (click)="getUser(user)"
+              [disabled]="user.isBlocked"
+              class="py-3 px-4 disabled:bg-red-300 inline-flex justify-center items-center gap-2 -ml-px first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium bg-red-600 hover:bg-red-700 text-gray-900 align-middle transition-all text-sm"
+            >
+              <i class="fa fa-ban text-white"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+<div
+  [ngClass]="isModalOpen ? 'block' : 'hidden'"
+  class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50"
+>
+  <div
+    class="bg-white dark:bg-gray-800 dark:text-gray-100 p-8 rounded-lg shadow shadow-white max-w-md w-full relative"
+  >
+    <h2 class="text-2xl font-bold mb-4 text-black dark:text-white">
+      Add User to Blacklist
+    </h2>
+    <form
+      #form="ngForm"
+      (ngSubmit)="addToBlacklist(form)"
+      class="max-w-sm mx-auto"
+      autocomplete="off"
+    >
+      <div class="mb-5">
+        <label
+          for="reason"
+          class="block mb-2 text-sm font-medium text-black dark:text-white"
+          >Reason</label
+        >
+        <div>
+          <div
+            class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+          >
+            <textarea
+              [(ngModel)]="model.reason"
+              name="reason"
+              id="reason"
+              class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+              rows="4"
+              placeholder="Enter any additional order notes..."
+              required
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="mb-5">
+        <button
+          [disabled]="!form.valid"
+          type="submit"
+          class="text-white w-full cursor-pointer bg-sky-500 border-0 py-2 px-6 focus:outline-none hover:bg-sky-600 rounded text-lg"
+        >
+          Add
+        </button>
+      </div>
+    </form>
+    <button
+      (click)="closeModal()"
+      class="absolute top-2 right-2 text-white hover:text-gray-300 text-2xl"
+    >
+      <i class="fa-solid fa-circle-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 1)"></ngx-spinner>

@@ -1,0 +1,181 @@
+<section class="overflow-x-auto px-5">
+  <h1
+    class="text-center mt-5 mb-10 text-black dark:text-white text-3xl font-bold"
+  >
+    Brands
+  </h1>
+
+  @if(brands.length>8){
+  <button
+    (click)="openModal('create')"
+    class="py-3 rounded-full mb-5 px-4 bg-blue-500 hover:bg-blue-600 first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium text-gray-900 align-middle float-start transition-all text-sm"
+  >
+    <i class="fa fa-add text-white"></i>
+  </button>
+
+  <div class="flex justify-end align-middle mt-10">
+    <pagination-controls
+      (pageChange)="page = $event"
+      nextLabel=""
+      previousLabel=""
+      [responsive]="true"
+      [autoHide]="true"
+      class="custom-pagination"
+    ></pagination-controls>
+  </div>
+  }
+
+  <table
+    class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm text-center rounded"
+  >
+    <thead class="ltr:text-left rtl:text-right">
+      <tr>
+        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+          Name
+        </th>
+      </tr>
+    </thead>
+
+    <tbody class="divide-y divide-gray-200">
+      @for (brand of brands | paginate: {itemsPerPage: 8, currentPage: page};
+      track brand.id) {
+      <tr>
+        <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+          {{ brand.name }}
+        </td>
+        <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+          <div class="flex justify-center">
+            <button
+              (click)="deleteBrand(brand)"
+              class="py-3 px-4 group bg-white disabled:hover:bg-red-300 hover:bg-red-600 inline-flex justify-center items-center gap-2 -ml-px first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium text-gray-900 align-middle transition-all text-sm"
+            >
+              <i class="fa fa-trash group-hover:text-white text-red-600"></i>
+            </button>
+            <button
+              (click)="openModal('update')"
+              (click)="getBrand(brand)"
+              class="py-3 px-4 disabled:bg-red-300 inline-flex justify-center items-center gap-2 -ml-px first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium bg-green-600 hover:bg-green-700 text-gray-900 align-middle transition-all text-sm"
+            >
+              <i class="fa fa-edit text-white"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+<div
+  [ngClass]="isCreateModalOpen ? 'block' : 'hidden'"
+  class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50"
+>
+  <div
+    class="bg-white dark:bg-gray-800 dark:text-gray-100 p-8 rounded-lg shadow shadow-white max-w-md w-full relative"
+  >
+    <h2 class="text-2xl font-bold mb-4 text-black dark:text-white">
+      Create New Brand
+    </h2>
+    <form
+      #form="ngForm"
+      (ngSubmit)="createBrand(form)"
+      class="max-w-sm mx-auto"
+      autocomplete="off"
+    >
+      <div class="mb-5">
+        <label
+          for="name"
+          class="block mb-2 text-sm font-medium text-black dark:text-white"
+          >Name</label
+        >
+        <div>
+          <div
+            class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+          >
+            <input
+              [(ngModel)]="createModel.name"
+              name="name"
+              id="name"
+              class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+              rows="4"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <div class="mb-5">
+        <button
+          [disabled]="!form.valid"
+          type="submit"
+          class="text-white w-full cursor-pointer bg-sky-500 border-0 py-2 px-6 focus:outline-none hover:bg-sky-600 rounded text-lg"
+        >
+          Add
+        </button>
+      </div>
+    </form>
+    <button
+      (click)="closeModal('create')"
+      class="absolute top-2 right-2 text-gray-200 transition hover:text-gray-300 text-2xl"
+    >
+      <i class="fa-solid fa-circle-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<div
+  [ngClass]="isUpdateModalOpen ? 'block' : 'hidden'"
+  class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50"
+>
+  <div
+    class="bg-white dark:bg-gray-800 dark:text-gray-100 p-8 rounded-lg shadow shadow-white max-w-md w-full relative"
+  >
+    <h2 class="text-2xl font-bold mb-4 text-black dark:text-white">
+      Update Brand
+    </h2>
+    <form
+      #updateForm="ngForm"
+      (ngSubmit)="updateBrand(updateForm)"
+      class="max-w-sm mx-auto"
+      autocomplete="off"
+    >
+      <div class="mb-5">
+        <label
+          for="updateName"
+          class="block mb-2 text-sm font-medium text-black dark:text-white"
+          >Name</label
+        >
+        <div>
+          <div
+            class="overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+          >
+            <input
+              [(ngModel)]="updateModel.name"
+              name="updateName"
+              id="updateName"
+              class="w-full p-3 text-black resize-none border-none align-top focus:ring-0 sm:text-sm"
+              rows="4"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <div class="mb-5">
+        <button
+          [disabled]="!updateForm.valid"
+          type="submit"
+          class="text-white w-full cursor-pointer bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+    <button
+      (click)="closeModal('update')"
+      class="absolute top-2 right-2 text-gray-200 transition hover:text-gray-300 text-2xl"
+    >
+      <i class="fa-solid fa-circle-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 1)"></ngx-spinner>

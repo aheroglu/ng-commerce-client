@@ -1,0 +1,107 @@
+<section class="text-gray-600 body-font relative dark:text-white">
+  <div class="container px-5 py-24 mx-auto">
+    <div class="flex flex-col text-center w-full mb-12">
+      <h1
+        class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900 dark:text-white"
+      >
+        Contact Us
+      </h1>
+      <p class="lg:w-2/3 mx-auto leading-relaxed text-base">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Mollitia,
+        ipsa?
+      </p>
+    </div>
+    <div class="lg:w-1/2 md:w-2/3 mx-auto">
+      <form #form="ngForm" autocomplete="off" (ngSubmit)="send(form)">
+        <div class="flex flex-wrap -m-2">
+          <div class="p-2 w-1/2">
+            <div class="relative">
+              <label
+                for="name"
+                class="leading-7 text-sm text-gray-600 dark:text-white"
+                >Name</label
+              >
+              <input
+                [(ngModel)]="model.name"
+                name="name"
+                id="name"
+                type="text"
+                class="w-full bg-gray-100 dark:bg-white bg-opacity-50 rounded border cursor-pointer border-gray-300 focus:border-sky-600 focus:bg-white focus:ring-2 focus:ring-sky-700 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                required
+              />
+            </div>
+          </div>
+          <div class="p-2 w-1/2">
+            <div class="relative">
+              <label
+                for="email"
+                class="leading-7 text-sm text-gray-600 dark:text-white"
+                >Email</label
+              >
+              <input
+                [(ngModel)]="model.email"
+                name="email"
+                type="email"
+                id="email"
+                class="w-full bg-gray-100 dark:bg-white bg-opacity-50 rounded border cursor-pointer border-gray-300 focus:border-sky-600 focus:bg-white focus:ring-2 focus:ring-sky-700 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                required
+              />
+            </div>
+          </div>
+          <div class="p-2 w-full">
+            <div class="relative">
+              <label
+                for="topic"
+                class="leading-7 text-sm text-gray-600 dark:text-white"
+                >Topic</label
+              >
+              <select
+                [(ngModel)]="model.topic"
+                name="topic"
+                id="topic"
+                class="w-full bg-gray-100 dark:bg-white bg-opacity-50 rounded border cursor-pointer border-gray-300 focus:border-sky-600 focus:bg-white focus:ring-2 focus:ring-sky-700 text-base outline-none text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                required
+              >
+                <option selected disabled [value]="">Select Topic</option>
+                <option [value]="'Return & Exchange'">Return & Exchange</option>
+                <option [value]="'Product Information'">
+                  Product Information
+                </option>
+                <option [value]="'Payment Issue'">Payment Issue</option>
+                <option [value]="'General Inquiry'">General Inquiry</option>
+                <option [value]="'Complaint'">Complaint</option>
+                <option [value]="'Account Issues'">Account Issues</option>
+              </select>
+            </div>
+          </div>
+          <div class="p-2 w-full">
+            <div class="relative">
+              <label
+                for="message"
+                class="leading-7 text-sm text-gray-600 dark:text-white"
+                >Message</label
+              >
+              <textarea
+                [(ngModel)]="model.content"
+                name="message"
+                id="message"
+                class="w-full bg-gray-100 dark:bg-white bg-opacity-50 rounded border border-gray-300 focus:border-sky-600 focus:bg-white focus:ring-2 focus:ring-sky-700 h-48 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                required
+              ></textarea>
+            </div>
+          </div>
+          <div class="p-2 w-full">
+            <button
+              [disabled]="!form.valid"
+              class="flex mx-auto cursor-pointer text-white bg-sky-500 border-0 py-2 px-8 focus:outline-none hover:bg-sky-600 rounded text-lg"
+            >
+              Send Message
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 1)"></ngx-spinner>
