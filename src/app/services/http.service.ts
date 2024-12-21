@@ -16,10 +16,11 @@ export class HttpService {
     param?: any,
     body?: any
   ): Observable<ResultModel<T>> {
-    return this.http.post<ResultModel<T>>(
-      `${apiUrl}/${endpoint}?${param}`,
-      body,
-      { headers: { Authorization: 'Bearer ' + this.auth.token } }
-    );
+    const url = param
+      ? `${apiUrl}/${endpoint}?${param}`
+      : `${apiUrl}/${endpoint}`;
+    return this.http.post<ResultModel<T>>(url, body, {
+      headers: { Authorization: 'Bearer ' + this.auth.token },
+    });
   }
 }
